@@ -10,7 +10,12 @@ def get_ip(ifname):
 	try:
 
 		sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-		return socket.inet_ntoa(fcntl.ioctl(sock.fileno(), 0x8915, struct.pack('256s', bytes(ifname[:15], 'utf-8')))[20:24])
+		return socket.inet_ntoa(
+			fcntl.ioctl(
+				sock.fileno(), 
+				0x8915, #SIOCGIFADDR
+				struct.pack('256s', bytes(ifname[:15], 'utf-8'))
+			)[20:24])
 
 	except IOError:
 		return "NODEV"
